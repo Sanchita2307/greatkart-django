@@ -1,0 +1,364 @@
+- Open Gitbash --> go to your folder
+ - cd "C:\Users\l\OneDrive\Desktop\Python_datascience\Greatkart"
+
+- create virtual env isnide you folder -->
+ - python -m venv virtual_env
+
+- activate venv
+ - source virtual_env/Scripts/activate
+
+- deactivate --> to come out of the venv
+
+- Global Scope of the system
+  - pip freeze --> give syou all the insatlled pakacges in your system.
+Si nce we don't need allt hsoe packages for our applciation, we created venv where only our project resources will be there
+
+alembic==1.17.2
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.12.0
+blinker==1.9.0
+certifi==2025.11.12
+cffi==2.0.0
+charset-normalizer==3.4.3
+click==8.3.1
+colorama==0.4.6
+cryptography==46.0.3
+distlib==0.4.0
+et_xmlfile==2.0.0
+Faker==37.6.0
+fastapi==0.125.0
+filelock==3.20.0
+Flask==3.1.2
+Flask-SQLAlchemy==3.1.1
+greenlet==3.2.4
+idna==3.11
+itsdangerous==2.2.0
+Jinja2==3.1.6
+jproperties==2.1.2
+Mako==1.3.10
+MarkupSafe==3.0.3
+mysqlclient==2.2.7
+numpy==2.3.5
+openpyxl==3.1.5
+pandas==2.3.3
+pillow==11.3.0
+platformdirs==4.5.0
+psycopg2==2.9.11
+py4j==0.10.9.9
+pycparser==2.23
+pydantic==2.12.5
+pydantic_core==2.41.5
+pyfakefs==5.9.3
+PyMySQL==1.1.2
+pypdf==6.1.1
+PyPDF2==3.0.1
+pysonar==1.3.0.4086
+pyspark==4.1.0
+python-dateutil==2.9.0.post0
+pytz==2025.2
+PyYAML==6.0.3
+reportlab==4.4.4
+requests==2.32.5
+responses==0.25.8
+six==1.17.0
+SQLAlchemy==2.0.44
+starlette==0.50.0
+toml==0.10.2
+tomli==2.2.1
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+tzdata==2025.2
+urllib3==2.6.2
+virtualenv==20.35.3
+Werkzeug==3.1.3
+
+- to install any specfi version
+ - pip install django==3.1
+
+- create django project
+ - django-admin startproject greatkart . --> this . will not create many folders single folder of greatkart.
+ - python manage.py runserver
+
+- create views.py --> manually, in the project level it is required. when we create app, we do not need to create it.
+
+- in urls.py --> 
+  from . import views 
+
+- create templates folders --> 
+  - home.html
+
+- settings.py has to be told that your using templates, so add below:
+ TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": ["templates"],
+  
+- render --> comes from django.shortcuts
+- HTTPResponse --> comes fromdjango.http
+
+- downlaod the zipped resources --> greatkart template
+ - paste index.html code in home.html page
+
+--> configuring static files in django --> so that all the css, jpeg, png would work
+- create a folder static in line of greatkart --> settings etc.
+ - copy paste the folders ccs, fonts, images and js to this folder --> static pages
+
+- in settings.py down -->
+STATIC_URL = "static/" # already presenet
+STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    "greatkart/static"
+]
+
+- gitbash in your project folder, virtual_env
+ - python manage.py collectstatic --> this will create a new static folder unde your project
+  --> 203 static files copied to 'C:\Users\l\OneDrive\Desktop\Python_datascience\Greatkart\static'.
+
+- {% load static %} --> on top of home.html
+  - <link href="{% static 'images/favicon.ico' %}" rel="shortcut icon" type="image/x-icon"> --> shortcut ucon of your website
+  
+- add static on all the images 
+
+- extend home.html, all the htmls extended and laoded with static 
+ - includes folder has 2 htmls which are common for all the files
+
+#### Category App
+- create app --> category  --> register you app in settings.py --> create model in models.py
+ --> register you model in admin.py
+ - python manage.py makemigrations
+
+- python -m pip install Pillow --> requried for ImageField
+
+- python manage.py makemigrations
+
+- i changed db settings to mysql so
+ - make changes in settings.py
+ - pip install mysqlclient
+ - python manage.py migrate
+
+- create superuser to access django app --> python manage.py createsuperuser
+ - admin, admin
+
+- django by default adds s after nay model in app /website, so to correct that
+     class Meta:
+        verbose_name = "category"
+        verbose_name_plural = "categories"
+        db_table = "Category"
+
+###### CUSTOM USER MODEL --> we want to login using email address not username whihc says login
+ djnago guves default user model, login, password display page etc.
+ - #### accounts app to achieve 
+ - create accouns app --> regsiter in settings.py 
+ - models.py --> Account model 
+ - settings.py --> AUTH_USER_MODEL = "accounts.Account" # telling django of using custom user model for login
+ - admin.py --> admin.site.register(Account)
+
+- delete old migration files and db from mysql db so that old details/admin will be removed
+ - again makemigration and migrate for fresh details
+ - python manage.py runserver --> now it is asking for email instead of login/username
+
+- create superuser 
+ - it will ask for email, passowrd, firstname all details saved in Account model
+ - sanchitajainjbp23@gmail.com, Summij@23
+
+- to change the passowrd to readonly in admin.py
+  from django.contrib.auth.admin import UserAdmin # to make password uneditable at the admin site
+  
+  # Register your models here.
+  
+  class AccountAdmin(UserAdmin):
+      list_display = ("email", "first_name", "last_name", "username","last_login","date_joined", "is_active")
+      filter_horizontal = ()
+      list_filter = ()
+      fieldsets = ()
+  
+  admin.site.register(Account, AccountAdmin)
+
+- adding media files to the porject from django admin site, prerequisites
+ - in settings.py 
+  # media files configuration
+   MEDIA_URL = "/media"
+   MEDIA_ROOT = BASE_DIR/"media"
+
+  - in urls.py
+  urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("home/", views.home, name="home"),
+] + static(settings.MEDIA_URL, document_root=MEDIA_ROOT)
+
+- download images as suggetsed --> greatkart images --> category
+ - create category
+  - Shirts --> add image file from the folder
+
+- While adding category Slug should autopopulate --> to correct that:
+ - in models.py 
+   - change the category of Slug to SlugField in your category model 
+   - makemigration --> migrate
+
+ - in admin.py
+  class CategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug":("category_name",)}
+    list_display = ("category_name", "slug")
+
+  admin.site.register(Category,CategoryAdmin)
+
+###### STORE APP ####
+ 
+- in home.html, remove all the rows and keep one row clo pair, keep a for loop
+
+- to bring product names, images, prices dynamically, in home.html
+
+images.url will pick images from media url in your proj that you have
+
+  <div class="row">
+	{% for product in products %}
+	<div class="col-md-3">
+		<div class="card card-product-grid">
+			<a href="./product-detail.html" class="img-wrap"> <img src="{{ product.images.url }}"> </a>
+			<figcaption class="info-wrap">
+				<a href="./product-detail.html" class="title">{{product.product_name}}</a>
+				<div class="price mt-1">{{product.price}}</div> <!-- price-wrap.// -->
+			</figcaption>
+		</div>
+
+######## SETTING UP STORE PAGE - WHEN YOU CLICK SHOULD REDIRECT YOU THROUGH THE STORE #########
+- create urls.py under store app
+  from django.urls import path
+  from .import views
+ 
+urlpatterns = [
+    path("", views.store, name="store"),
+]
+
+- main urls.py (greatkart)
+ from django.urls import path, include
+ path("store/", include("store.urls")),
+
+- in views.py in store
+ from django.shortcuts import render
+
+
+  def store(request):
+      return render(request, "store/store.html")
+
+- create new folder in templates --> store --> store.html
+
+<a href="#" class="btn btn-block btn-primary">Add to cart </a> --> gives Add to Cart in blue color
+<a href="#" class="btn btn-block btn-success"> --> will guve you green color button
+
+- remove static images --> we will details or the prods that we added into db 
+So view.py/store 
+
+from django.shortcuts import render
+from .models import Product
+
+# Create your views here.
+def store(request):
+    products = Product.objects.all().filter(is_available=True) # to display all the products we added on our websie
+    
+    context = {"products":products,}
+
+    return render(request, "store/store.html", context)
+
+-   store.html 
+
+<div class="row">
+    {% for product in products %}
+	<div class="col-md-4">
+		<figure class="card card-product-grid">
+			<div class="img-wrap"> 
+				
+				<img src= "{{ product.images.url }}"> 
+				
+			</div> <!-- img-wrap.// -->
+			<figcaption class="info-wrap">
+				<div class="fix-height">
+					<a href="./product-detail.html" class="title">{{ product.product_name }}</a>
+					<div class="price-wrap mt-2">
+						<span class="price">{{ product.price }}</span>
+					</div> <!-- price-wrap.// -->
+
+# to put the dynmaic number instead of 32 items found
+- in views.py/store
+
+def store(request):
+    products = Product.objects.all().filter(is_available=True) # to display all the products we added on our websie
+    product_count = products.count() # to show  prodcut count on website 
+
+    context = {"products":products,
+               "product_count":product_count,}
+
+    return render(request, "store/store.html", context)
+ 
+- in store.html
+
+<header class="border-bottom mb-4 pb-3">
+		<div class="form-inline">
+			<span class="mr-md-auto"><b>{{product_count}}</b> items found</span>
+
+- get_object_or_404 --> will retun any defined object or 404
+ - from django.shortcuts import render, get_object_or_404
+
+#### list down all the categories in your app in drop down #####
+- in category app --> context_processors.py --> create function
+- in settings.py --> "category.context_processors.menu_links" add this under Templates
+- includes/navbar.html --> all the categories are here
+ {% for category in links %}
+				<a class="dropdown-item" href="{{category.get_url}}">{{category.category_name}} </a>
+				{% endfor %}
+- in models.py/category 
+
+  from django.urls import reverse
+  def get_url(self):
+            return reverse("products_by_category", args= [self.slug]) #products_by_category comes from store mdeols.py
+
+  now this will add respective slug in your url when you click on categro --> http://127.0.0.1:8000/store/jeans/ etc.
+
+#### single product page ####
+ http://127.0.0.1:8000/category_slug/product_slug
+
+ category__slug --> 2 underscores is the sytanx ro get the slug of categery model
+
+- when you click on product or image, it should rediretc you to that page, in home.html do this
+<a href="{{product.get_url}}" class="img-wrap"> <img src="{{ product.images.url }}"> </a>
+			<figcaption class="info-wrap">
+				<a href="{{product.get_url}}" class="title">{{product.product_name}}</a>
+
+##### click on logo and go to home page ############
+	<div class="col-lg-2 col-md-3 col-6">
+		<a href="{% url 'home' %}" class="brand-wrap">
+			<!-- <img class="logo" src="{% static './images/logo.png' %}" > -->
+            <img class="logo" src="{% static 'images/logo.png' %}">
+
+
+##### click on store and go to stor epage ########
+<a href="{% url 'store' %}" class="btn btn-outline-primary">Store</a>
+	<div class="col-lg  col-md-6 col-sm-12 col">
+		<form action="#" class="search">
+
+#### click on See all and got to store page @#### 
+in home.html
+<header class="section-heading">
+	<a href="{% url 'store' %}" class="btn btn-outline-primary float-right">See all</a>
+
+### click on product name and image should rediretc you to its page #######
+
+	<a href ="{{product.get_url}}"><img src= "{{ product.images.url }}"> </a>
+				
+			</div> <!-- img-wrap.// -->
+			<figcaption class="info-wrap">
+				<div class="fix-height">
+					<a href="{{product.get_url}}" class="title">{{ product.product_name }}</a>
+
+#### when a product is out of stock, istead of add to cart it should show the same ##
+
+- go to django admin, set any random prd's stock to 0
+
+- go to product_detail.html 
+	{% if single_product.stock <= 0 %}
+	    <h5 class="text-danger">Out of Stock</h5> # class danger will give red color
+	{% else %}
+	<a href="./product-detail.html" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  
+	</a>
+	{% endif %}
