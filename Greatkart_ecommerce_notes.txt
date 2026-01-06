@@ -362,3 +362,142 @@ in home.html
 	<a href="./product-detail.html" class="btn  btn-primary"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  
 	</a>
 	{% endif %}
+
+############# CART APP #############33
+
+## when i click on add to cart button it should go to cart
+ - session key amd session
+ - we're bale to redirect to car page but it give sonly product name and not othe rinfo
+  so we need to modify our cart function
+
+#### when shopping cart is empty, it should say your cart is empty ###
+
+### fixing store page products Add To cArt functionaloity ##### - in cart.html
+<a href="{% url 'add_cart' product.id %}" class="btn btn-block btn-primary">Add to cart </a>
+<a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+
+### if the prodcut already added to the cart, we will show a button Added to Cart not add to cart###
+- in store view - product_detail function
+
+def product_detail(request, category_slug, product_slug):
+    try:
+        # to get access to slug attribite of category model
+        single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
+        # accessing cart modules cart_id is the fk of Cart so from CartItems'cart, we;re accessing cart_id whihc is FK of Cart method 
+        in_cart = CartItem.objects.filter(cart__cart_id=_cart_id(request), product=single_product).exists() 
+        return HttpResponse(in_cart) # returns true or false for products in cart or not in cart
+        exit()
+
+#### cart icon function work fix ########
+- carts --> context_processors.py
+- in settings in Templates add --> carts.context_processsors.counter",
+
+- in navbar.html -->
+
+##### out of stock item getting button add to cart and adding to cart - fix ##
+- in store.html
+<a href="{{ product.get_url }}" class="btn btn-block btn-primary">View Details</Details> </a>
+			</figcaption>
+
+
+### fixing pagination ####
+- in stor.view.py
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+
+- you'll only see 6 prods as per below code on page 1
+   else:
+        products = Product.objects.all().filter(is_available=True) # to display all the products we added on our websie
+        paginator =  Paginator(products, 6)
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page) # page--> page=2 in url
+        product_count = products.count() # to show  prodcut count on website
+
+    
+    context = { #"products":products,
+                 "products": paged_products,
+                 "product_count":product_count,}
+
+- lets fix the switching of pages to 2 3 and so on
+
+- to work out all - selection of category fro all categories drop down"
+  if category_slug != None:
+        categories = get_object_or_404(Category, slug=category_slug)
+        products = Product.objects.filter(category = categories, is_available=True)
+        paginator =  Paginator(products, 1)
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page) # page--> page=2 in url
+        product_count = products.count() # to show  prodcut count on website
+
+- in store.html
+<nav class="mt-4" aria-label="Page navigation sample">
+  {% if products.has_other_pages %}
+    <ul class="pagination">
+
+      {% if products.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+      {% endif %}
+
+      {% for i in products.paginator.page_range %}
+        {% if products.number == i %}
+          <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+
+      {% if products.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ products.next_page_number }}">Next</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+      {% endif %}
+
+    </ul>
+  {% endif %}
+</nav>
+
+http://127.0.0.1:8000/store/?page=2 etc.
+
+##### Work out search funcationality ##########
+http://127.0.0.1:8000/store/search/
+
+- store/viws.py --> search function
+- urls.py --> create url
+- navbar.html --> fix the search code
+
+### deling with variations ####
+store/ models.py --> Variation model 
+store/admin.p --> register the modle with admin as we want to see that in admin site
+makemigrations , migrate
+go to admin site --> add variations
+ - display product details instead of VaritionObject on admin site, in admin.py
+
+class VariationModel(admin.ModelAdmin):
+    list_display = ["product", "variation_category", "variation_value", "is_active"]
+  
+admin.site.register(Variation, VariationModel)
+
+- to make is_active editable --> list_editable = ('is_active', )
+
+- to be able to filter fromadmin site --> list_filter = ("product", "variation_category", "variation_value")
+
+- makeing colors dynamic --> product_detail.html 
+ {% for i in single_product.variation_set.all %} --> variation_set.all will bring all the data from models
+
+- in store/models.py
+- class VariationManager(models.Manager): - to fix size and color coming in single category on website, we need to crate variation manager
+  this allows you to verify the queruset
+
+- in product_detail.html --> {% for i in single_product.variation_set.color %} --> set.color insteadl of set.all
+
+__iexact method --> to compare or mathc the values
+
+
+
+
+
