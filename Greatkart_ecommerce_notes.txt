@@ -547,3 +547,6 @@ Rest resgietsed users are still set to be inactive, to activate themesleevs, log
 - email__exact --> case sensitive will chekc if the email is mathcing iwth the email with what we have in db
 
 - user.set_password(password) --> inbuild function of djago will take the password and hash it, save_passowr dwon't work
+
+- url = request.META.get("HTTP_REFERER") # will grab the prev url from where u came
+            return redirect('dashboard')
