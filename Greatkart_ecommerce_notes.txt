@@ -497,7 +497,53 @@ admin.site.register(Variation, VariationModel)
 
 __iexact method --> to compare or mathc the values
 
+######## pushing code to github ####
+in cmd:
+cd <proj dir>
+git status
+git -A add
+git -m commit "<your updation code here>"
+Since we already pushed code to main branch we don't every time need to follow that step
 
+#### Verification & Authentication - Registration ###
+ {{ form.as_p }} --> print the form as paragraph
 
+- cleaned_data --> to fecth the value from requeyst when you use django forms
+ def register(request):
+    if request == "POST":
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            first_name = form.cleaned_data['last_name']
 
+- field errros --> giving __all__ with passowrd doesn't math!
 
+### django messages packages #######
+
+sesstings.py --> copy below from django messaging framework
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.INFO: "",  -replace INFO with ERROR(css class) and blank qutes with danger
+    50: "critical", - remove this
+}
+
+- in gretkart app - js --> scripts.js add down
+
+setTimeout(function(){
+    $('#message').fadeout('slow')
+}, 4000) #miliseconds
+
+- right click on page --> inspect --> delete cache etc.
+
+###### token authentication ################
+### after registering, account verification is requried.  as of now only admin can login.
+Rest resgietsed users are still set to be inactive, to activate themesleevs, login authentication email wouldgo 
+
+## dashboard ###
+
+## forgotPassowrd ###
+- __iexact --> case insensitive
+- email__exact --> case sensitive will chekc if the email is mathcing iwth the email with what we have in db
+
+- user.set_password(password) --> inbuild function of djago will take the password and hash it, save_passowr dwon't work

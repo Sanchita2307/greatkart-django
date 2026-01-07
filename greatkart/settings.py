@@ -145,3 +145,17 @@ STATICFILES_DIRS = [
 # media files configuration
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+# fromdjango messages framrwork - to implemenet mesgaing funcationality
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+    }
+
+# smtp configuration
+EMAIL_HOST  = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sanchitajainjbp23@gmail.com'
+EMAIL_HOST_PASSWORD = 'suee thoh qhro whuu' # this is apppassword that you create not gmail passowrd
+EMAIL_USE_TLS = True
