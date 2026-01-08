@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title mb-4">Billing Address</h4>
-                <form action="" method="POST">
+                <form action="{% url 'place_order' %}" method="POST">
                     {% csrf_token %}
                     
                     <!-- Row 1: First Name + Last Name -->
@@ -104,9 +104,11 @@
                                             {{ cart_item.product.product_name }}
                                         </a>
                                         <p class="text-muted small">
+                                           {% if cart_item.variations.all %}
                                             {% for item in cart_item.variations.all %}
                                                 {{ item.variation_category|capfirst }} : {{ item.variation_value|capfirst }}<br>
                                             {% endfor %}
+                                           {% endif %}
                                         </p>
                                     </figcaption>
                                 </figure>

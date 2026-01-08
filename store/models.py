@@ -45,6 +45,10 @@ class Variation(models.Model):
     is_active = models.BooleanField(default=True)
     created_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = 'variation'
+        # unique_together = ('variation_category', 'variation_value')
+
 
     # str giving error
     # def __str__(self):

@@ -550,3 +550,44 @@ Rest resgietsed users are still set to be inactive, to activate themesleevs, log
 
 - url = request.META.get("HTTP_REFERER") # will grab the prev url from where u came
             return redirect('dashboard')
+
+########## creating orders ##############
+- create orders app
+
+##### creating paypal Sandbox account ##
+- create PayPalbusiness account --> login
+- developer.paypal.com --> testing tools --> accounts --> create account 
+- 1 personal account as a buyer --> add money to it 100000$ free
+- 1 business acount as a seller 
+- Integrate cleint side paymebnt button code in your payments.html and base.html
+- click on paypal --> will route you topayment --> login form your buyer accoutn --> make payment
+using any of the cards shows if paypal balance is not available.
+- order created
+
+#### now we need to send order to backend ####
+- javascript inbuilt function fecth will be used
+
+## generating csrf toekn manually ####
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+### moving the cart items to Order Product table ####
+ # reduce the quantity of sold prods
+ # clear the cart
+ # send the email to the customer
+ # send order number and transaction id back to sendData method via json response
