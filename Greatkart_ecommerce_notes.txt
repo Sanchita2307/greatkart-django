@@ -590,4 +590,9 @@ var csrftoken = getCookie('csrftoken');
  # reduce the quantity of sold prods
  # clear the cart
  # send the email to the customer
- # send order number and transaction id back to sendData method via json response
+ 
+ 
+### ratings and reveiws ###
+greatkart --> static --> create one custom.css 
+in base.html --> 
+<link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css"/>
