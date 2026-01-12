@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config # securing sensitive info
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-40ukg(s33)**zk$qp3tqvk315twcxr0krz88*-pe$*h1q-z8+h"
+SECRET_KEY = config('SECRET_KEY') # will fecth the value form .env
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG",default=True,cast=bool) # If we don't use cast, config will return string form not bool like "True"
 
 ALLOWED_HOSTS = []
 
@@ -155,8 +156,8 @@ MESSAGE_TAGS = {
     }
 
 # smtp configuration
-EMAIL_HOST  = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'sanchitajainjbp23@gmail.com'
-EMAIL_HOST_PASSWORD = 'suee thoh qhro whuu' # this is apppassword that you create not gmail passowrd
-EMAIL_USE_TLS = True
+EMAIL_HOST  = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT", cast=int)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD") # this is apppassword that you create not gmail passowrd
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)

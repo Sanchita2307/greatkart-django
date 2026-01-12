@@ -596,3 +596,46 @@ var csrftoken = getCookie('csrftoken');
 greatkart --> static --> create one custom.css 
 in base.html --> 
 <link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css"/>
+
+Greatkart/
+├── greatkart/          # project settings folder
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+│
+├── store/              # app
+├── accounts/           # app
+├── carts/              # app
+├── orders/             # app
+│
+├── media/              # MEDIA ROOT (HERE)
+│   └── products/
+│       ├── product1.jpg
+│       ├── product2.png
+│
+├── static/
+├── templates/
+└── manage.py
+
+pip install django-admin-thumbnails --> to be able so see multiple addedimages in the productgallery at django-admin site.
+
+now we need to render those images on webiset so product_detail.thm changes
+
+python manage.py collectstatic
+
+jquery cdn --> for allavailble images clicking --> in footer.tml
+<head>
+<script src="jquery-3.7.1.min.js"></script>
+</head>
+
+## securing sensitive information ### -- >.env file
+- secret key
+- debug
+- database name
+- email config
+ - python decouple --> pip install python-decouple --> https://pypi.org/project/python-decouple/
+
+- in settings.py
+ - from decouple import config
+ - create a new file in the root folder --> .env
