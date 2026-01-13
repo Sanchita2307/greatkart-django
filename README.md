@@ -4,10 +4,15 @@ Greatkart is a fully-functional eCommerce web application built with Django, des
 
 # Features
 User Authentication: Register, login, and manage user profiles
+
 Product Browsing: View products by category with dynamic filtering
+
 Shopping Cart: Add, update, or remove products
+
 Checkout and Orders: Place orders and view order history
+
 Admin Panel: Manage products, orders, and users
+
 Responsive Design: Works on desktop and mobile devices
 
 # Tech Stack
@@ -28,6 +33,7 @@ venv\Scripts\activate   # Windows
 # source venv/bin/activate  # Mac/Linux
 
 # Apply migrations
+python manage.py makemigrations
 python manage.py migrate
 
 # Run the server
