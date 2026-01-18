@@ -121,21 +121,21 @@
 <script>
 
   // using jQuery
-function getCookie(name) {
+  function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
+      }
     }
     return cookieValue;
-}
+  }
 
   var amount = "{{grand_total}}"
   var url = "{% url 'payments' %}"
@@ -162,29 +162,27 @@ function getCookie(name) {
         sendData();
         function sendData() {
           fetch(url, {
-            method:"POST",
+            method: "POST",
+            credentials: "same-origin",
             headers: {
               "Content-type": "application/json",
               "X-CSRFToken": csrftoken,
-
             },
-            body: JSON.stringify(
-              {
+            body: JSON.stringify({
               orderID: orderID,
-              transID: details.id, // we get details in ispect consoel session when you make payments etc.
+              transID: details.id,
               payment_method: payment_method,
               status: details.status
-              }
-            ),
-
+            }),
           })
-          .then((response) => response.json()) // data came from view.py jsonresponse payment method
-          .then((data) => {
-            // console.log("Success: ", data),
-            // console.log("Transaction Completed.");
-            window.location.href = redirect_url + '?order_number='+data.order_number+'&payment_id='+data.transID;
 
-          });
+            .then((response) => response.json()) // data came from view.py jsonresponse payment method
+            .then((data) => {
+              // console.log("Success: ", data),
+              // console.log("Transaction Completed.");
+              window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.transID;
+
+            });
         }
       });
     },

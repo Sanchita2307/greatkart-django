@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from store.models import Product
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.conf import settings
 
 # Create your views here.
 
@@ -48,7 +49,7 @@ def payments(request):
         product_variation = cart_item.variations.all()
         orderproduct = OrderProduct.objects.get(id=orderproduct.id)
         orderproduct.variations.set(product_variation)
-        orderproduct.save
+        orderproduct.save()
 
 
     # reduce the quantity of sold prods
@@ -60,15 +61,24 @@ def payments(request):
     CartItem.objects.filter(user=request.user).delete()
 
     # send the email to the customer
-    mail_subjct = 'Thank you for your order'
-    message = render_to_string('orders/order_received_email.html',{
-                'user': request.user, #pk 
-                'order': order,        
-    })
-    to_email = request.user.email
-    send_email = EmailMessage(mail_subjct,message,to=[to_email])
-    send_email.send()
-
+    try:
+        mail_subject = 'Thank you for your order'
+        message = render_to_string('orders/order_received_email.html',{
+                    'user': request.user, #pk 
+                    'order': order,        
+        })
+        to_email = request.user.email
+        send_email = EmailMessage(
+        mail_subject,
+        message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[to_email],
+        )
+        send_email.content_subtype = "html"
+        send_email.send(fail_silently=False)
+    except Exception as e:
+        # Log the error but don't fail the payment
+        print(f"Email sending failed: {e}")
 
     # send order number and transaction id back to sendData method via json response
     data = {
@@ -135,8 +145,8 @@ def place_order(request, quantity=0, total=0,):
                 "grand_total": grand_total,
             }
             return render(request, "orders/payments.html", context)
-        else:
-            return redirect('checkout') 
+    else:
+        return redirect('checkout') 
  
 def order_complete(request):
     order_number = request.GET.get('order_number')

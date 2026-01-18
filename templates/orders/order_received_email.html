@@ -1,17 +1,15 @@
 {% autoescape off %}
 
-Hi {{ user.first_name }},
+<p>Hi {{ user.first_name }},</p>
 
+<p>Thank you for your order! We truly appreciate your purchase and hope you enjoyed shopping with us.</p>
 
-Thank you for your order! We truly appreciate your purchase and hope you enjoyed shopping with us.
+<p><strong>Order Number:</strong> {{ order.order_number }}</p>
 
-Order Number: {{order.order_number}}
+<p>If you have any questions regarding your order, feel free to contact us.<br>
+We look forward to serving you again soon.</p>
 
-If you have any questions regarding your order, feel free to contact us.
-We look forward to serving you again soon.
-
-
-Best regards,
-The Greatkart Team
+<p>Best regards,<br>
+The BuyBay Team</p>
 
 {% endautoescape %}
